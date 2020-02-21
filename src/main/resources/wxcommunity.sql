@@ -10,7 +10,7 @@ drop table if exists author_login;
 drop table if exists author_post;
 
 /*==============================================================*/
-/* Table: user_login                                         */
+/* Table: author_login                                         */
 /*==============================================================*/
 create table author_login
 (

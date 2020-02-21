@@ -1,25 +1,35 @@
 package dn.domain;
 
 public class User {
-    private Integer id;
-    private String username;
+    private Integer aid;
+    private String author;
     private String password;
-    private String name;
+    private Integer status;
 
-    public Integer getId() {
-        return id;
+    public User() {
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public User(Integer aid, String author, String password, Integer status) {
+        this.aid = aid;
+        this.author = author;
+        this.password = password;
+        this.status = status;
     }
 
-    public String getUsername() {
-        return username;
+    public Integer getAid() {
+        return aid;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setAid(Integer aid) {
+        this.aid = aid;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public String getPassword() {
@@ -30,21 +40,21 @@ public class User {
         this.password = password;
     }
 
-    public String getName() {
-        return name;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
+                "aid=" + aid +
+                ", author='" + author + '\'' +
                 ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
+                ", status=" + status +
                 '}';
     }
 }

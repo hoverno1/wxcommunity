@@ -1,5 +1,6 @@
 package dn;
 
+import dn.domain.Post;
 import dn.domain.User;
 import dn.mapper.UserMapper;
 import org.junit.Test;
@@ -17,8 +18,14 @@ public class MybatisTest {
     private UserMapper userMapper;
 
     @Test
-    public void test() {
+    public void queryUser() {
         List<User> users = userMapper.queryUserList();
         System.out.println(users);
+    }
+
+    @Test
+    public void queryPost() {
+        List<Post> posts = userMapper.queryPostList();
+        System.out.println(posts);
     }
 }
