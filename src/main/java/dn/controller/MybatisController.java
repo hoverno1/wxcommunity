@@ -30,4 +30,24 @@ public class MybatisController {
         List<Post> posts = userMapper.queryPostList();
         return posts;
     }
+
+    //获取检验前端返回的登陆信息
+    @RequestMapping("/Test")
+    @ResponseBody
+    public int Test(String frontUsername,String frontPassword) {
+        List<User> users = queryLogin();
+        int flag = 0;
+        //遍历users,查找是否有此用户
+        for(User user:users){
+            if(frontUsername.equals(user.getAuthor())&&frontPassword.equals(user.getPassword())){
+                //有就改变status状态，返回确认信息
+                user.setStatus(1);
+                //1就是flag的值
+                return 1;
+            }
+        }
+        //无就返回否定信息
+        //信息名为flag 1：有此用户信息 0：无此用户信息
+        return flag;
+    }
 }
