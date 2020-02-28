@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -31,15 +32,29 @@ public class MybatisController {
         return posts;
     }
 
+    //向数据库录入用户注册信息
+    @RequestMapping("/Login")
+    @ResponseBody
+    public int Login(HttpServletRequest request) {
+        //flag是注册成功与否标志 0失败 1成功
+        int flag = 0;
+        String frontUsername = request.getParameter("username");
+        String frontPassword = request.getParameter("password");
+        return flag;
+    }
+
     //获取检验前端返回的登陆信息
     @RequestMapping("/Test")
     @ResponseBody
-    public int Test(String frontUsername,String frontPassword) {
+    public int Test(HttpServletRequest request) {
+        String frontUsername = request.getParameter("username");
+        String frontPassword = request.getParameter("password");
+        //System.out.println(frontUsername + "===" + frontPassword);
         List<User> users = queryLogin();
         int flag = 0;
         //遍历users,查找是否有此用户
-        for(User user:users){
-            if(frontUsername.equals(user.getAuthor())&&frontPassword.equals(user.getPassword())){
+        for (User user : users) {
+            if (frontUsername.equals(user.getAuthor()) && frontPassword.equals(user.getPassword())) {
                 //有就改变status状态，返回确认信息
                 user.setStatus(1);
                 //1就是flag的值
