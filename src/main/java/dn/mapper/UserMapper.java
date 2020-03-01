@@ -12,4 +12,6 @@ public interface UserMapper {
     public List<User> queryUserList();
 
     public List<Post> queryPostList();
+
+    public void insertUser(User user);
 }

@@ -3,4 +3,7 @@
 <mapper namespace="dn.mapper.UserMapper">
     <select id="queryUserList" resultType="User"> select * from author_login</select>
     <select id="queryPostList" resultType="Post"> select * from author_post</select>
+    <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="aid">insert into
+    author_login(author,password,status)values(#{author},#{password},#{status})
+    </insert>
 </mapper>

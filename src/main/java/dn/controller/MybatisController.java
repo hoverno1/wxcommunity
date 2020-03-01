@@ -6,9 +6,13 @@ import dn.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -32,7 +36,7 @@ public class MybatisController {
         return posts;
     }
 
-    //向数据库录入用户注册信息
+    //向数据库录入用户注册信息（用户名，密码，状态），aid自动增加生成
     @RequestMapping("/Login")
     @ResponseBody
     public int Login(HttpServletRequest request) {
@@ -40,7 +44,24 @@ public class MybatisController {
         int flag = 0;
         String frontUsername = request.getParameter("username");
         String frontPassword = request.getParameter("password");
-        return flag;
+        //System.out.println(frontUsername + "===" + frontPassword);
+        //封装一个包含信息的user对象
+        User u = new User(null, frontUsername, frontPassword, 0);
+        //将此user对象注入到数据库中
+        userMapper.insertUser(u);
+        //信息名为flag 1：有此用户信息 0：无此用户信息
+        return 1;
+    }
+
+    //向数据库录入用户注册信息（头像）
+    @RequestMapping("/LoginPic")
+    @ResponseBody
+    public int LoginPic(HttpServletRequest request,
+                        @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
+        //flag是注册成功与否标志 0失败 1成功
+        int flag = 0;
+
+        return 1;
     }
 
     //获取检验前端返回的登陆信息
