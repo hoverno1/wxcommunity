@@ -14,4 +14,8 @@ public interface UserMapper {
     public List<Post> queryPostList();
 
     public void insertUser(User user);
+
+    public User queryAid(String username);
+
+    public void insertAvatar(User user);
 }

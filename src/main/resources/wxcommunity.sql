@@ -17,6 +17,7 @@ create table author_login
    aid                   int not null auto_increment,
    author                varchar(100) not null,
    password              varchar(32) not null,
+   avatar                varchar(200) not null,
    status                int not null,/*登陆状态 1：登陆 0：未登录*/
    primary key (aid)
 );
@@ -45,3 +46,4 @@ insert  into `author_post`(`postId`,`aid`,`date`,`disease`,`avatar`,`imgSrc`,`de
 '2019-02-09 01:13:17','玉米叶斑病','/images/2.png','/images/plant/yumiyebanbing.jpg','多晒晒太阳就好了2'),(2,3,
 '2019-02-09 01:13:17','玉米叶斑病','/images/3.png','/images/plant/yumiyebanbing.jpg','多晒晒太阳就好了3'),(3,4,
 '2019-02-09 01:13:17','玉米叶斑病','/images/4.png','/images/plant/yumiyebanbing.jpg','多晒晒太阳就好了4');
+

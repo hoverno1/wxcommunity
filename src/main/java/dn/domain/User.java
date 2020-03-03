@@ -5,15 +5,25 @@ public class User {
     private String author;
     private String password;
     private Integer status;
+    private String avatar;
 
     public User() {
     }
 
-    public User(Integer aid, String author, String password, Integer status) {
+    public User(Integer aid, String author, String password, Integer status, String avatar) {
         this.aid = aid;
         this.author = author;
         this.password = password;
         this.status = status;
+        this.avatar = avatar;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public Integer getAid() {
@@ -55,6 +65,7 @@ public class User {
                 ", author='" + author + '\'' +
                 ", password='" + password + '\'' +
                 ", status=" + status +
+                ", avatar='" + avatar + '\'' +
                 '}';
     }
 }

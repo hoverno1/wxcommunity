@@ -4,6 +4,10 @@
     <select id="queryUserList" resultType="User"> select * from author_login</select>
     <select id="queryPostList" resultType="Post"> select * from author_post</select>
     <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="aid">insert into
-    author_login(author,password,status)values(#{author},#{password},#{status})
+    author_login(aid,author,password,status,avatar)values(#{aid},#{author},#{password},#{status},#{avatar})
     </insert>
+    <update id="insertAvatar" parameterType="User">
+        UPDATE author_login SET avatar=#{avatar} WHERE aid=#{aid}
+    </update>
+    <select id="queryAid" resultType="User"> select * from author_login where author = #{author}</select>
 </mapper>
