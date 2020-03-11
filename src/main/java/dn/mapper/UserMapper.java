@@ -18,4 +18,8 @@ public interface UserMapper {
     public User queryAid(String username);
 
     public void insertAvatar(User user);
+
+    public User queryAvatar(String aid);
+
+    public void insertPost(Post post);
 }

@@ -27,6 +27,11 @@ public class MybatisController {
     private UserMapper userMapper;
 
     private String picPlace;
+    private String picPlace2;
+    private String aid;
+    private String avatar;
+    private String disease;
+    private String diseaseContent;
 
     //获取author_login表中数据
     @RequestMapping("/queryUser")
@@ -66,15 +71,88 @@ public class MybatisController {
         return u.getAid();
     }
 
-    //根据前端传来的数据aid以及要发布的详情信息，将这些信息存储到相对应的aid的数据库中
+    //根据前端传来的数据aid以及要发布的详情信息（不包含图片），将这些信息存储到相对应的aid的数据库中
     //要注意需要将author_login中的avatar头像复制到对应的author_post中
     @RequestMapping("/publishPost")
     @ResponseBody
     public int publishPost(HttpServletRequest request) {
-        String author = request.getParameter("username");
-        //System.out.println(author);
-        User u = userMapper.queryAid(author);
-        return u.getAid();
+        aid = null;
+        disease = null;
+        diseaseContent = null;
+        aid = request.getParameter("aid");
+        disease = request.getParameter("disease");
+        diseaseContent = request.getParameter("diseaseContent");
+        System.out.println(aid + "===" + disease + "===" + diseaseContent);
+        if (aid.equals("null") || disease.equals("null") || diseaseContent.equals("null")) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+    //根据前端传来的数据aid以及要发布的详情信息（包含图片），将这些信息存储到相对应的aid的数据库中
+    //要注意需要将author_login中的avatar头像复制到对应的author_post中
+    //并将发布内容存入数据库
+    @RequestMapping(value = "/publishPostPic", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
+    public int publishPostPic(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        MultipartHttpServletRequest req = (MultipartHttpServletRequest) request;
+
+        //对应前端的upload的name参数"file"
+        MultipartFile multipartFile = req.getFile("file");
+
+        //realPath填写电脑文件夹路径
+        String realPath = "C:\\Users\\hover\\Desktop\\wxcommuitypic2";
+
+        //格式化时间戳
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        String nowTime = sdf.format(new Date().getTime());
+
+        //裁剪用户id
+        String originalFirstName = multipartFile.getOriginalFilename();
+        String picFirstName = originalFirstName.substring(0, originalFirstName.indexOf("."));
+
+        //取得图片的格式后缀
+        String originalLastName = multipartFile.getOriginalFilename();
+        String picLastName = originalLastName.substring(originalLastName.lastIndexOf("."));
+
+        //拼接：名字+时间戳+后缀
+        String picName = picFirstName + "." + nowTime + picLastName;
+        try {
+            File dir = new File(realPath);
+            //如果文件目录不存在，创建文件目录
+            if (!dir.exists()) {
+                dir.mkdir();
+                System.out.println("创建文件目录成功：" + realPath);
+            }
+            File file = new File(realPath, picName);
+            //获取真正的用户名，并调用方法存入
+            picPlace2 = file.getName();
+            multipartFile.transferTo(file);
+            //System.out.println("添加图片成功！");
+            //将发布内容存入数据库
+            //查询头像信息
+            System.out.println(aid);
+            User u1 = userMapper.queryAvatar(aid);
+            System.out.println(u1);
+            avatar = u1.getAvatar();
+            System.out.println(avatar);
+            //信息存入数据库
+            Post post = new Post();
+            post.setAvatar(avatar);
+            post.setDate(nowTime);
+            post.setDetail(diseaseContent);
+            post.setImgSrc(picPlace2);
+            post.setDisease(disease);
+            post.setAid(aid);
+            userMapper.insertPost(post);
+            return 1;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     //向数据库录入用户注册信息（用户名，密码，状态），aid自动增加生成

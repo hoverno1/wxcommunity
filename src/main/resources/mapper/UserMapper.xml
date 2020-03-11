@@ -10,4 +10,8 @@
         UPDATE author_login SET avatar=#{avatar} WHERE aid=#{aid}
     </update>
     <select id="queryAid" resultType="User"> select * from author_login where author = #{author}</select>
+    <select id="queryAvatar" resultType="User"> select * from author_login where aid = #{aid}</select>
+    <insert id="insertPost" parameterType="Post" useGeneratedKeys="true" keyProperty="postId">insert into
+    author_post(postId,aid,date,disease,imgSrc,detail,avatar)values(#{postId},#{aid},#{date},#{disease},#{imgSrc},#{detail},#{avatar})
+    </insert>
 </mapper>
