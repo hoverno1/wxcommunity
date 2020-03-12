@@ -4,6 +4,7 @@ import dn.domain.Post;
 import dn.domain.User;
 import dn.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +35,7 @@ public class MybatisController {
     private String avatar;
     private String disease;
     private String diseaseContent;
+    private final String prefixImg="http://localhost:8080/image/";
 
     //获取author_login表中数据
     @RequestMapping("/queryUser")
@@ -49,6 +53,17 @@ public class MybatisController {
         return posts;
     }
 
+    //寻找图片所在位置
+    @Configuration
+    public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
+        @Override
+        public void addResourceHandlers(ResourceHandlerRegistry registry) {
+            registry.addResourceHandler("/image/**").addResourceLocations("file:C://Users//hover//Desktop" +
+                    "//wxcommuitypic//");
+            super.addResourceHandlers(registry);
+        }
+    }
+
     //获取前端数据aid,将图片存入author_login表中
     @RequestMapping("/postAid")
     @ResponseBody
@@ -57,7 +72,7 @@ public class MybatisController {
         System.out.println(aid);
         User u = new User();
         u.setAid(Integer.parseInt(aid));
-        u.setAvatar(picPlace);
+        u.setAvatar(prefixImg+picPlace);
         userMapper.insertAvatar(u);
     }
 
@@ -102,7 +117,7 @@ public class MybatisController {
         MultipartFile multipartFile = req.getFile("file");
 
         //realPath填写电脑文件夹路径
-        String realPath = "C:\\Users\\hover\\Desktop\\wxcommuitypic2";
+        String realPath = "C:\\Users\\hover\\Desktop\\wxcommuitypic";
 
         //格式化时间戳
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
@@ -142,7 +157,7 @@ public class MybatisController {
             post.setAvatar(avatar);
             post.setDate(nowTime);
             post.setDetail(diseaseContent);
-            post.setImgSrc(picPlace2);
+            post.setImgSrc(prefixImg+picPlace2);
             post.setDisease(disease);
             post.setAid(aid);
             userMapper.insertPost(post);
