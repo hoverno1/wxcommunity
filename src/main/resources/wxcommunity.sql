@@ -47,3 +47,16 @@ insert  into `author_post`(`postId`,`aid`,`date`,`disease`,`avatar`,`imgSrc`,`de
 '2019-02-09 01:13:17','玉米叶斑病','/images/3.png','/images/plant/yumiyebanbing.jpg','多晒晒太阳就好了3'),(3,4,
 '2019-02-09 01:13:17','玉米叶斑病','/images/4.png','/images/plant/yumiyebanbing.jpg','多晒晒太阳就好了4');
 
+/*==============================================================*/
+/* Table: message                                        */
+/*==============================================================*/
+create table message
+(
+   mid                  int not null auto_increment,
+   postId               int not null,
+   nid                  int not null,
+   message              varchar(1000),
+   primary key (mid)
+);
+
+ALTER TABLE author_post ADD FOREIGN KEY (postId) REFERENCES author_post(postId) ;

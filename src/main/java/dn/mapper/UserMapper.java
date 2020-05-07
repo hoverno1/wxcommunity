@@ -1,5 +1,6 @@
 package dn.mapper;
 
+import dn.domain.Message;
 import dn.domain.Post;
 import dn.domain.User;
 import org.apache.ibatis.annotations.Mapper;
@@ -22,4 +23,10 @@ public interface UserMapper {
     public User queryAvatar(String aid);
 
     public void insertPost(Post post);
+
+    public int testName(String username);
+
+    public void insertMessage(Message message);
+
+    public List<Message> queryMessageList(String postId);
 }

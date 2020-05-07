@@ -1,5 +1,6 @@
 package dn.controller;
 
+import dn.domain.Message;
 import dn.domain.Post;
 import dn.domain.User;
 import dn.mapper.UserMapper;
@@ -35,7 +36,35 @@ public class MybatisController {
     private String avatar;
     private String disease;
     private String diseaseContent;
-    private final String prefixImg="http://localhost:8080/image/";
+    private final String prefixImg="https://my.plantdisrecogn.com/wxcommunity/image/";
+
+    //向message表插入数据
+    @RequestMapping("/insertMessage")
+    @ResponseBody
+    public void saveMessage(HttpServletRequest request) {
+        Integer postId = Integer.valueOf(request.getParameter("postId"));
+        Integer nid = Integer.valueOf(request.getParameter("nid"));
+        String message = request.getParameter("message");
+        //System.out.println(message);
+        //System.out.println(aid + "===" + disease + "===" + diseaseContent);
+        if (message.equals("null")) {
+            return ;
+        } else {
+            Message m = new Message(null, postId, nid, message);
+            //将此user对象注入到数据库中
+            userMapper.insertMessage(m);
+        }
+    }
+
+    //从message表中查询数据
+    @RequestMapping("/queryMessageList")
+    @ResponseBody
+    public List<Message> getMessage(HttpServletRequest request) {
+        String postId = request.getParameter("postId");
+        List<Message> messages = userMapper.queryMessageList(postId);
+        //System.out.println(messages);
+        return messages;
+    }
 
     //获取author_login表中数据
     @RequestMapping("/queryUser")
@@ -58,8 +87,7 @@ public class MybatisController {
     public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
         @Override
         public void addResourceHandlers(ResourceHandlerRegistry registry) {
-            registry.addResourceHandler("/image/**").addResourceLocations("file:C://Users//hover//Desktop" +
-                    "//wxcommuitypic//");
+            registry.addResourceHandler("/image/**").addResourceLocations("file:C:/Users/Administrator/Desktop/wxcommuitypic/");
             super.addResourceHandlers(registry);
         }
     }
@@ -97,7 +125,7 @@ public class MybatisController {
         aid = request.getParameter("aid");
         disease = request.getParameter("disease");
         diseaseContent = request.getParameter("diseaseContent");
-        System.out.println(aid + "===" + disease + "===" + diseaseContent);
+        //System.out.println(aid + "===" + disease + "===" + diseaseContent);
         if (aid.equals("null") || disease.equals("null") || diseaseContent.equals("null")) {
             return 0;
         } else {
@@ -117,7 +145,7 @@ public class MybatisController {
         MultipartFile multipartFile = req.getFile("file");
 
         //realPath填写电脑文件夹路径
-        String realPath = "C:\\Users\\hover\\Desktop\\wxcommuitypic";
+        String realPath = "C:\\Users\\Administrator\\Desktop\\wxcommuitypic";
 
         //格式化时间戳
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
@@ -138,7 +166,7 @@ public class MybatisController {
             //如果文件目录不存在，创建文件目录
             if (!dir.exists()) {
                 dir.mkdir();
-                System.out.println("创建文件目录成功：" + realPath);
+                //System.out.println("创建文件目录成功：" + realPath);
             }
             File file = new File(realPath, picName);
             //获取真正的用户名，并调用方法存入
@@ -147,11 +175,11 @@ public class MybatisController {
             //System.out.println("添加图片成功！");
             //将发布内容存入数据库
             //查询头像信息
-            System.out.println(aid);
+            //System.out.println(aid);
             User u1 = userMapper.queryAvatar(aid);
-            System.out.println(u1);
+            //System.out.println(u1);
             avatar = u1.getAvatar();
-            System.out.println(avatar);
+            //System.out.println(avatar);
             //信息存入数据库
             Post post = new Post();
             post.setAvatar(avatar);
@@ -183,6 +211,7 @@ public class MybatisController {
             //System.out.println("两个数据为空");
             return 0;
         }
+        if(userMapper.testName(frontUsername)!=0) return 0;
         //封装一个包含信息的user对象
         User u = new User(null, frontUsername, frontPassword, 0, "");
         //将此user对象注入到数据库中
@@ -195,14 +224,13 @@ public class MybatisController {
     @RequestMapping(value = "/LoginPic", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public int uploadPicture(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
         MultipartHttpServletRequest req = (MultipartHttpServletRequest) request;
 
         //对应前端的upload的name参数"file"
         MultipartFile multipartFile = req.getFile("file");
 
         //realPath填写电脑文件夹路径
-        String realPath = "C:\\Users\\hover\\Desktop\\wxcommuitypic";
+        String realPath = "C:\\Users\\Administrator\\Desktop\\wxcommuitypic";
 
         //格式化时间戳
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
@@ -215,9 +243,9 @@ public class MybatisController {
         //取得图片的格式后缀
         String originalLastName = multipartFile.getOriginalFilename();
         String picLastName = originalLastName.substring(originalLastName.lastIndexOf("."));
-
         //拼接：名字+时间戳+后缀
         String picName = picFirstName + "." + nowTime + picLastName;
+        //System.out.println(picName);
         try {
             File dir = new File(realPath);
             //如果文件目录不存在，创建文件目录

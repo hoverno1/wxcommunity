@@ -14,4 +14,9 @@
     <insert id="insertPost" parameterType="Post" useGeneratedKeys="true" keyProperty="postId">insert into
     author_post(postId,aid,date,disease,imgSrc,detail,avatar)values(#{postId},#{aid},#{date},#{disease},#{imgSrc},#{detail},#{avatar})
     </insert>
+    <select id="testName" resultType="int"> select count(*) from author_login where author = #{author}</select>
+    <insert id="insertMessage" parameterType="Message" useGeneratedKeys="true" keyProperty="mid">insert into
+    message(mid,postId,nid,message)values(#{mid},#{postId},#{nid},#{message})
+    </insert>
+    <select id="queryMessageList" resultType="Message"> select * from message where postId = #{postId}</select>
 </mapper>
