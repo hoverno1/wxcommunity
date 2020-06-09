@@ -61,8 +61,12 @@ public class MybatisController {
     @ResponseBody
     public List<Message> getMessage(HttpServletRequest request) {
         String postId = request.getParameter("postId");
+        System.out.println(postId);
+        int i = Integer.parseInt(postId);
+        i++;
+        postId = String.valueOf(i);
         List<Message> messages = userMapper.queryMessageList(postId);
-        //System.out.println(messages);
+        System.out.println(messages);
         return messages;
     }
 
