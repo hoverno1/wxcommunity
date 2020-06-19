@@ -60,3 +60,13 @@ create table message
 );
 
 ALTER TABLE author_post ADD FOREIGN KEY (postId) REFERENCES author_post(postId) ;
+
+/*==============================================================*/
+/* Table: score                                        */
+/*==============================================================*/
+create table score
+(
+   aid                  int not null,
+   postId               int not null,
+   score                int not null //记录用户点击次数 默认0
+);
