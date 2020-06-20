@@ -19,4 +19,11 @@
     message(mid,postId,nid,message)values(#{mid},#{postId},#{nid},#{message})
     </insert>
     <select id="queryMessageList" resultType="Message"> select * from message where postId = #{postId}</select>
+    <insert id="testScore" parameterType="Score">
+        insert ignore into score (aid,postId) values (#{scoreId},#{postId});
+    </insert>
+    <update id="addScore" parameterType="Score">
+        update score SET score=score+1 WHERE aid=#{scoreId} and postId = #{postId}
+    </update>
+    <select id="queryAidByName" resultType="User"> select aid from author_login where author = #{author}</select>
 </mapper>

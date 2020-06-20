@@ -4,6 +4,7 @@ import dn.domain.Message;
 import dn.domain.Post;
 import dn.domain.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -29,4 +30,10 @@ public interface UserMapper {
     public void insertMessage(Message message);
 
     public List<Message> queryMessageList(String postId);
+
+    public void addScore(@Param("scoreId") String aid, @Param("postId") String postId);
+
+    public String queryAidByName(String author);
+
+    public void testScore(@Param("scoreId") String aid, @Param("postId") String postId);
 }

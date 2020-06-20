@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import sun.reflect.generics.tree.VoidDescriptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -61,10 +62,24 @@ public class MybatisController {
     @ResponseBody
     public List<Message> getMessage(HttpServletRequest request) {
         String postId = request.getParameter("postId");
-        System.out.println(postId);
+        String globalUserName = request.getParameter("globalUserName");
+        //System.out.println("postId: "+postId);
+        //System.out.println("globalUserName: "+globalUserName);
         int i = Integer.parseInt(postId);
         i++;
         postId = String.valueOf(i);
+        //调用方法标记用户点击数+1
+        //先根据globalUserName查找aid
+        String scoreId = "1";
+        if(globalUserName!="1") {
+            scoreId = userMapper.queryAidByName(globalUserName);
+        }
+        if(scoreId==null){
+            scoreId="1";
+        }
+        //System.out.println(scoreId+"==="+postId);
+        userMapper.testScore(scoreId,postId);
+        userMapper.addScore(scoreId,postId);
         List<Message> messages = userMapper.queryMessageList(postId);
         System.out.println(messages);
         return messages;
@@ -129,7 +144,7 @@ public class MybatisController {
         aid = request.getParameter("aid");
         disease = request.getParameter("disease");
         diseaseContent = request.getParameter("diseaseContent");
-        //System.out.println(aid + "===" + disease + "===" + diseaseContent);
+        //System.out.println(aid + "===" + disease + "===" + diseaseContent );
         if (aid.equals("null") || disease.equals("null") || diseaseContent.equals("null")) {
             return 0;
         } else {
