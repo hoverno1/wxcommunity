@@ -25,5 +25,6 @@
     <update id="addScore" parameterType="Score">
         update score SET score=score+1 WHERE aid=#{scoreId} and postId = #{postId}
     </update>
-    <select id="queryAidByName" resultType="User"> select aid from author_login where author = #{author}</select>
+    <select id="queryAidByName" resultType="java.lang.String"> select aid from author_login where author = #{author}</select>
+    <select id="findAllByAid" resultType="Post"> select * from author_post where postId in <foreach collection="postIds" item="postId" open="(" close=")" separator=","> #{postId}</foreach></select>
 </mapper>

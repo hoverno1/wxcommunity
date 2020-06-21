@@ -1,22 +1,33 @@
 package dn.controller;
 
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import dn.domain.Message;
 import dn.domain.Post;
 import dn.domain.User;
 import dn.mapper.UserMapper;
+import org.apache.mahout.cf.taste.common.TasteException;
+import org.apache.mahout.cf.taste.impl.model.file.FileDataModel;
+import org.apache.mahout.cf.taste.impl.model.jdbc.MySQLJDBCDataModel;
+import org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood;
+import org.apache.mahout.cf.taste.impl.neighborhood.ThresholdUserNeighborhood;
+import org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender;
+import org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity;
+import org.apache.mahout.cf.taste.model.DataModel;
+import org.apache.mahout.cf.taste.model.JDBCDataModel;
+import org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
+import org.apache.mahout.cf.taste.recommender.RecommendedItem;
+import org.apache.mahout.cf.taste.recommender.Recommender;
+import org.apache.mahout.cf.taste.similarity.UserSimilarity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import sun.reflect.generics.tree.VoidDescriptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -64,14 +75,14 @@ public class MybatisController {
         String postId = request.getParameter("postId");
         String globalUserName = request.getParameter("globalUserName");
         //System.out.println("postId: "+postId);
-        //System.out.println("globalUserName: "+globalUserName);
+        System.out.println("globalUserName: "+globalUserName);
         int i = Integer.parseInt(postId);
         i++;
         postId = String.valueOf(i);
         //调用方法标记用户点击数+1
         //先根据globalUserName查找aid
         String scoreId = "1";
-        if(globalUserName!="1") {
+        if(!globalUserName.equals("-1")) {
             scoreId = userMapper.queryAidByName(globalUserName);
         }
         if(scoreId==null){
@@ -84,6 +95,7 @@ public class MybatisController {
         System.out.println(messages);
         return messages;
     }
+
 
     //获取author_login表中数据
     @RequestMapping("/queryUser")

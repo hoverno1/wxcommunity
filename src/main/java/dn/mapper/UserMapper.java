@@ -2,6 +2,7 @@ package dn.mapper;
 
 import dn.domain.Message;
 import dn.domain.Post;
+import dn.domain.Score;
 import dn.domain.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -36,4 +37,6 @@ public interface UserMapper {
     public String queryAidByName(String author);
 
     public void testScore(@Param("scoreId") String aid, @Param("postId") String postId);
+
+    public List<Post> findAllByAid(@Param("postIds") List<Long> postId);
 }
